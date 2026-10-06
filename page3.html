@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Наши моменты &lt;3</title>
+    <style>
+        html, body {
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        body {
+            background-color: #3b0000;
+            font-family: Georgia, "Times New Roman", serif;
+            color: #ffd9d9;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* ===== ФОНОВОЕ СЕРДЦЕ С НАДПИСЬЮ ===== */
+        .bg-heart {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80vmin;
+            height: 80vmin;
+            max-width: 900px;
+            max-height: 900px;
+            z-index: 0;
+            pointer-events: none;
+            user-select: none;
+            opacity: 0.35;
+            animation: heartPulse 2.5s ease-in-out infinite;
+        }
+
+        /* Сердце рисуем через SVG-подобную форму */
+        .bg-heart svg {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: drop-shadow(0 0 40px rgba(255, 0, 0, 0.9));
+        }
+
+        /* Надпись внутри сердца */
+        .bg-heart .heart-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -45%);
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 8vmin;
+            font-weight: bold;
+            letter-spacing: 6px;
+            color: #ffffff;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.9),
+                         0 0 40px rgba(255, 0, 0, 1);
+            white-space: nowrap;
+        }
+
+        /* Пульсация сердца */
+        @keyframes heartPulse {
+            0%   { transform: translate(-50%, -50%) scale(1); }
+            50%  { transform: translate(-50%, -50%) scale(1.08); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+
+        /* ===== КОНТЕНТ ПОВЕРХ СЕРДЦА ===== */
+        h1, .gallery, .buttons {
+            position: relative;
+            z-index: 2;
+        }
+
+        h1 {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 42px;
+            letter-spacing: 3px;
+            text-align: center;
+            margin: 0 0 40px;
+
+            background: linear-gradient(135deg, #ff0000 0%, #ff8080 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.7));
+        }
+
+        /* Сетка галереи */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 30px;
+            max-width: 1100px;
+            width: 100%;
+        }
+
+        /* Карточка с фото */
+        .photo-card {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: transform 0.3s;
+        }
+
+        .photo-card:hover {
+            transform: translateY(-6px);
+        }
+
+        /* Картинка внутри рамки */
+        .photo-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            display: block;
+            background: #1a0000;
+        }
+
+        /* Подпись под фото */
+        .caption {
+            margin-top: 12px;
+            font-size: 17px;
+            text-align: center;
+            color: #ffd9d9;
+            text-shadow: 0 0 6px rgba(255, 0, 0, 0.5);
+            line-height: 1.4;
+            padding: 0 10px;
+        }
+
+        /* ===== РАЗНЫЕ РАМКИ ===== */
+
+        .frame-1 {
+            padding: 10px;
+            background: #ffffff;
+            border-radius: 4px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.4),
+                        0 0 40px rgba(255, 0, 0, 0.4);
+        }
+
+        .frame-2 {
+            padding: 8px;
+            background: #3b0000;
+            border: 3px solid #ff0000;
+            outline: 3px solid #ffffff;
+            outline-offset: 4px;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+        }
+
+        .frame-3 {
+            padding: 8px;
+            background: #ffffff;
+            border-radius: 50%;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+            overflow: hidden;
+        }
+
+        .frame-3 img {
+            border-radius: 50%;
+        }
+
+        .frame-4 {
+            padding: 12px 12px 50px 12px;
+            background: #ffffff;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+            transform: rotate(-2deg);
+        }
+
+        .frame-4:hover {
+            transform: rotate(0deg);
+        }
+
+        .frame-5 {
+            padding: 6px;
+            background: linear-gradient(135deg, #ff0000, #ffffff, #8B0000);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.9);
+        }
+
+        .frame-5 img {
+            border-radius: 8px;
+        }
+
+        .frame-6 {
+            padding: 10px;
+            border: 3px dashed #ff4d4d;
+            background: rgba(255, 255, 255, 0.05);
+            box-shadow: 0 0 20px rgba(255, 0, 0, 0.6);
+        }
+
+        /* Кнопки внизу */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 50px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, #8B0000 70%);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+        }
+
+        /* Адаптация под телефоны */
+        @media (max-width: 600px) {
+            body { padding: 25px 15px; }
+            h1 {
+                font-size: 28px;
+                letter-spacing: 2px;
+                margin-bottom: 25px;
+            }
+            .gallery {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+            .photo-card img { height: 220px; }
+            .caption { font-size: 15px; }
+            .btn { font-size: 16px; padding: 12px 30px; }
+            .bg-heart .heart-text {
+                font-size: 11vmin;
+                letter-spacing: 3px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ФОНОВОЕ СЕРДЦЕ С НАДПИСЬЮ -->
+    <div class="bg-heart">
+        <svg viewBox="0 0 32 29.6" xmlns="http://www.w3.org/2000/svg">
+            <path d="M23.6,0c-3.4,0-6.3,2.7-7.6,5.6C14.7,2.7,11.8,0,8.4,0C3.8,0,0,3.8,0,8.4c0,9.4,9.5,11.9,16,21.2
+                     c6.1-9.3,16-12.1,16-21.2C32,3.8,28.2,0,23.6,0z"
+                  fill="#ff0000" />
+        </svg>
+        <div class="heart-text">ЛЮБЛЮ</div>
+    </div>
+
+    <h1>Наши моменты &lt;3</h1>
+
+    <div class="gallery">
+
+        <div class="photo-card">
+            <div class="frame-1">
+                <img src="https://picsum.photos/400/300?random=1" alt="Фото 1">
+            </div>
+            <div class="caption">Твоя улыбка — моё солнце ☀️</div>
+        </div>
+
+        <div class="photo-card">
+            <div class="frame-2">
+                <img src="https://picsum.photos/400/300?random=2" alt="Фото 2">
+            </div>
+            <div class="caption">Тот самый день, когда всё началось</div>
+        </div>
+
+        <div class="photo-card">
+            <div class="frame-3">
+                <img src="https://picsum.photos/400/300?random=3" alt="Фото 3">
+            </div>
+            <div class="caption">Ягодка 🍓</div>
+        </div>
+
+        <div class="photo-card">
+            <div class="frame-4">
+                <img src="https://picsum.photos/400/300?random=4" alt="Фото 4">
+            </div>
+            <div class="caption">Наш маленький мир</div>
+        </div>
+
+        <div class="photo-card">
+            <div class="frame-5">
+                <img src="https://picsum.photos/400/300?random=5" alt="Фото 5">
+            </div>
+            <div class="caption">Мармеладка 🍬</div>
+        </div>
+
+        <div class="photo-card">
+            <div class="frame-6">
+                <img src="https://picsum.photos/400/300?random=6" alt="Фото 6">
+            </div>
+            <div class="caption">Люблю тебя &lt;3</div>
+        </div>
+
+    </div>
+
+    <div class="buttons">
+        <a class="btn" href="page2.html">← Назад</a>
+        <a class="btn next-btn" href="page4.html">Дальше)</a>
+    </div>
+
+</body>
+</html>

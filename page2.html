@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Для тебя, ягодка &lt;3</title>
+    <style>
+        html, body {
+            margin: 0;
+            min-height: 100vh;
+        }
+
+        /* Тот же тёмно-красный фон, что и на первой странице */
+        body {
+            background-color: #3b0000;
+            font-family: Georgia, "Times New Roman", serif;
+            color: #ffd9d9;
+            padding: 40px 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow-x: hidden;
+            opacity: 0;
+            animation: pageFadeIn 0.8s ease forwards;
+        }
+
+        /* Плавное появление страницы */
+        @keyframes pageFadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Плавное исчезновение страницы при переходе */
+        body.fade-out {
+            animation: pageFadeOut 0.6s ease forwards;
+        }
+
+        @keyframes pageFadeOut {
+            from { opacity: 1; transform: translateY(0); }
+            to   { opacity: 0; transform: translateY(-15px); }
+        }
+
+        /* Слой с сердечками на фоне */
+        .hearts-bg {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 0;
+        }
+
+        /* Сердечко */
+        .heart {
+            position: absolute;
+            bottom: -60px;
+            line-height: 1;
+            color: #4a0000;
+            user-select: none;
+            will-change: transform, color, opacity;
+            animation-name: floatUp;
+            animation-timing-function: linear;
+            animation-iteration-count: infinite;
+        }
+
+        /* Подъём + переливание цвета от тёмно-красного к ярко-красному */
+        @keyframes floatUp {
+            0% {
+                transform: translateY(0) translateX(0) scale(0.8) rotate(0deg);
+                color: #3b0000;
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.85;
+            }
+            35% {
+                color: #8B0000;
+            }
+            65% {
+                color: #d40000;
+            }
+            100% {
+                transform: translateY(-115vh) translateX(var(--drift, 0px)) scale(1.25) rotate(18deg);
+                color: #ff1a1a;
+                opacity: 0;
+            }
+        }
+
+        /* Лёгкое мерцание-переливание поверх движения */
+        .heart::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            animation: pulse 2.5s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        /* Карточка с текстом */
+        .letter {
+            max-width: 750px;
+            width: 100%;
+            font-size: 20px;
+            line-height: 1.7;
+            text-align: left;
+            text-shadow: 0 0 6px rgba(255, 0, 0, 0.4);
+            position: relative;
+            z-index: 1;
+        }
+
+        .letter p {
+            margin: 0 0 22px;
+        }
+
+        /* Заголовок с красно-белым градиентом */
+        h1 {
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 42px;
+            letter-spacing: 3px;
+            text-align: center;
+            margin: 0 0 40px;
+
+            background: linear-gradient(135deg, #ff0000 0%, #ff8080 50%, #ffffff 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            color: transparent;
+
+            filter: drop-shadow(0 0 15px rgba(255, 0, 0, 0.7));
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Контейнер для кнопок внизу */
+        .buttons {
+            display: flex;
+            gap: 20px;
+            margin-top: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Общий стиль кнопок */
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-family: Consolas, "Courier New", monospace;
+            font-size: 18px;
+            font-weight: bold;
+            letter-spacing: 2px;
+            color: #ffffff;
+            border: 2px solid #ffffff;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease;
+            cursor: pointer;
+        }
+
+        /* Кнопка «Назад» — тёмно-красная */
+        .back-btn {
+            background: radial-gradient(circle at 30% 30%, #ff4d4d, #8B0000 70%);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.9);
+        }
+
+        .back-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 25px rgba(255, 255, 255, 0.9);
+        }
+
+        /* Кнопка «Дальше)» — светлая, ярче */
+        .next-btn {
+            background: radial-gradient(circle at 30% 30%, #ffffff, #ff4d4d 70%);
+            color: #3b0000;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+        }
+
+        .next-btn:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 35px rgba(255, 255, 255, 1);
+        }
+
+        /* Адаптация под телефоны */
+        @media (max-width: 600px) {
+            body {
+                padding: 25px 15px;
+            }
+            h1 {
+                font-size: 28px;
+                letter-spacing: 2px;
+                margin-bottom: 25px;
+            }
+            .letter {
+                font-size: 17px;
+                line-height: 1.6;
+            }
+            .btn {
+                font-size: 16px;
+                padding: 12px 30px;
+            }
+            .buttons {
+                gap: 15px;
+            }
+            .heart {
+                font-size: 22px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Фон с сердечками -->
+    <div class="hearts-bg" id="heartsBg"></div>
+
+    <h1>Для тебя ягодка &lt;3</h1>
+
+    <div class="letter">
+        <p>
+            Хочу выразить тебе огромную благодарность за всё, что ты делаешь для меня.
+            С того самого момента, как мы встретились, твоя доброта, забота и поддержка
+            стали неотъемлемой частью моей жизни. Каждый день, проведённый с тобой,
+            наполняет меня радостью и теплом. Люблю тебя, ягодка.
+        </p>
+
+        <p>
+            Ты всегда находишь время выслушать и поддержать меня в трудные моменты,
+            делишься своей мудростью и опытом, когда это необходимо. Твоя искренняя
+            улыбка и забота делают мой мир ярче и светлее. Благодаря тебе я чувствую
+            себя нужным и важным, и это бесценно. Ягодка, мармеладка.
+        </p>
+
+        <p>
+            Кроме того, ты всегда вдохновляешь меня становиться лучше, стремиться
+            к новым высотам и не бояться трудностей. Твоя вера в меня помогает мне
+            преодолевать любые преграды и достигать поставленных целей.
+            Люблю, целую, обнимаю.
+        </p>
+
+        <p>
+            Спасибо тебе за твою нежность, заботу и любовь. Ты – тот человек,
+            на которого я всегда могу положиться, с кем я могу быть искренним и открытым.
+        </p>
+
+        <p>
+            Я искренне надеюсь, что наша дружба будет крепнуть с каждым днём,
+            и мы будем вместе радоваться новым успехам и достижениям.
+            Люблю тебя, ягодка, мармеладка!
+        </p>
+    </div>
+
+    <div class="buttons">
+        <a class="btn back-btn" href="index.html">← Назад</a>
+        <a class="btn next-btn" href="page3.html" id="nextBtn">Дальше)</a>
+    </div>
+
+    <script>
+        (function () {
+            const container = document.getElementById('heartsBg');
+            const HEART_COUNT = 30; // количество сердечек на экране
+            const symbols = ['❤', '♥', '❥', '❣'];
+
+            function random(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            function createHeart() {
+                const heart = document.createElement('span');
+                heart.className = 'heart';
+                heart.textContent = symbols[Math.floor(Math.random() * symbols.length)];
+
+                // Горизонтальная позиция
+                heart.style.left = random(0, 100) + 'vw';
+
+                // Длительность полёта — от 8 до 18 секунд
+                const duration = random(8, 18);
+                heart.style.animationDuration = duration + 's';
+
+                // Случайная задержка, чтобы сердечки не стартовали одновременно
+                heart.style.animationDelay = random(0, duration) + 's';
+
+                // Горизонтальный дрейф (используется в keyframes)
+                heart.style.setProperty('--drift', random(-100, 100) + 'px');
+
+                // Случайный размер
+                heart.style.fontSize = random(18, 42) + 'px';
+
+                container.appendChild(heart);
+            }
+
+            for (let i = 0; i < HEART_COUNT; i++) {
+                createHeart();
+            }
+
+            // Плавный переход на следующую страницу
+            const nextBtn = document.getElementById('nextBtn');
+            nextBtn.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = this.getAttribute('href');
+                document.body.classList.add('fade-out');
+                setTimeout(function () {
+                    window.location.href = target;
+                }, 600);
+            });
+        })();
+    </script>
+
+</body>
+</html>
